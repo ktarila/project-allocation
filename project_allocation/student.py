@@ -27,3 +27,7 @@ class Student(object):
     def get_cgpa(self):
         """Return the name of student"""
         return self.cgpa
+
+    def __str__(self):
+        " Returns a dictionary of object"
+        return str(self.__dict__)

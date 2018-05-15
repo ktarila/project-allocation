@@ -1,5 +1,6 @@
 """This module describes the project object"""
 
+
 class Project(object):
     """A Student:
 
@@ -8,17 +9,16 @@ class Project(object):
         projects: A list of prefered projects.
     """
 
-    def __init__(self, name, title):
+    def __init__(self, area, supervisor):
         """Return a student object with *name* and  prefered
         project topics is *proj_pref* and student cgpa."""
-        self.name = name
-        self.title = title
+        self.area = area
+        self.supervisor = supervisor
 
-    def get_name(self):
+    def get_area(self):
         """Return the name of student"""
-        return self.name
+        return self.area
 
-    def get_title(self):
-        """Return the list of prefered projects"""
-        return self.title
-
+    def __str__(self):
+        " Returns a dictionary of object"
+        return str(self.__dict__)
