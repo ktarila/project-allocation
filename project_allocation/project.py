@@ -19,6 +19,10 @@ class Project(object):
         """Return the name of student"""
         return self.area
 
+    def to_dict(self):
+        """Dictionary of project object"""
+        return self.__dict__
+
     def __str__(self):
         " Returns a dictionary of object"
         return str(self.__dict__)

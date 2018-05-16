@@ -8,16 +8,17 @@ def main():
     # Reading student input file - and save in global variable
     readinput.read_student()
     readinput.read_subject_areas()
-    # print(STUDENTS[0])
+    # print(STUDENTS)
     # print(PROJECT_AREAS)
     # print(SUPERVISORS)
     rand_solution = solution.create_random_solution()
-    print(rand_solution)
+    # print(rand_solution)
     allocation = solution.solution_to_allocation(rand_solution)
-    print(allocation)
+    # print(allocation)
     supervisors = solution.get_supervisor_students(allocation)
     for item in supervisors:
         print(item, len(supervisors[item]))
+    solution.get_extra_student_penalty(rand_solution)
 
 
 if __name__ == '__main__':

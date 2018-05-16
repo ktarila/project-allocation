@@ -28,6 +28,10 @@ class Student(object):
         """Return the name of student"""
         return self.cgpa
 
+    def to_dict(self):
+        """Dictionary of student object"""
+        return self.__dict__
+
     def __str__(self):
         " Returns a dictionary of object"
         return str(self.__dict__)
