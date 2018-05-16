@@ -50,3 +50,19 @@ def get_extra_student_penalty(solution):
             extra = len(supervisor_students[item]) - cfg.SUPERVISORS[item]
             penalty += extra
     return penalty
+
+
+def get_student_pref_penalty(solution):
+    """get penalty for student not allocated perference"""
+    penalty = 0
+    for idx, value in enumerate(solution):
+        stud_prefs = cfg.STUDENTS[idx]['proj_pref']
+        pref_penalty = 0
+        try:
+            pref_penalty = stud_prefs.index(value)
+        except ValueError:
+            # penalty of 50 if assigned to non desired project
+            pref_penalty = 50
+        # print(pref_penalty, value, stud_prefs)
+        penalty += pref_penalty
+    return penalty
