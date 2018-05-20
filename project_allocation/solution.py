@@ -90,12 +90,16 @@ def get_cgpa_equal_penalty(solution):
                     for item in cfg.STUDENTS if item['name'] == student['student']]
             stud_details = stud_details + stud
         mean_cgpa_per_supervisor[key] = mean(stud_details)
-    # print(mean_cgpa_per_supervisor)
     # get unique supervisor combination pairs
     supervisor_combinations = list(itertools.combinations(cfg.SUPERVISORS, 2))
     # difference in each pair
     for item in supervisor_combinations:
         val = list(item)
+        # set average to 0 if supervisor not allocated any student
+        if val[0] not in mean_cgpa_per_supervisor:
+            mean_cgpa_per_supervisor[val[0]] = 0
+        if val[1] not in mean_cgpa_per_supervisor:
+            mean_cgpa_per_supervisor[val[1]] = 0
         difference = abs(mean_cgpa_per_supervisor[
             val[0]] - mean_cgpa_per_supervisor[val[1]])
         penalty += difference
@@ -107,7 +111,7 @@ def get_solution_quality(solution):
     gesp = get_extra_student_penalty(solution)
     gspp = get_student_pref_penalty(solution)
     gcep = get_cgpa_equal_penalty(solution)
-    print('GESP - Above average num students', gesp)
-    print('gcep - CGPA equal average', gcep)
-    print('gspp - Student Pref', gspp)
+    # print('GESP - Above average num students', gesp)
+    # print('gcep - CGPA equal average', gcep)
+    # print('gspp - Student Pref', gspp)
     return gesp * 5 + 10 * gcep + gspp
