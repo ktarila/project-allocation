@@ -18,10 +18,21 @@ def main():
     # print("Quality of ", rand_solution, "is: ", quality)
 
     # Gravitational search algorithm
-    population = utility.initialize_gsa(2, 3)
-    print(population)
-    acceleration = utility.pop_acceleration(population, 1)
-    print(acceleration)
+    num_iterations = 1
+    num_agents = 3
+    population = utility.initialize_gsa(num_iterations, num_agents)
+    for idx in range(1, num_iterations + 1):
+        print(idx, "************************************")
+        print(population)
+        acceleration = utility.pop_acceleration(population, idx)
+        updated_velocity = utility.get_normalized_velocity(acceleration)
+        print("Updated norm velocity")
+        print(updated_velocity)
+
+        # update the values
+        masses = utility.get_masses(population)
+        utility.dimension_new_position(
+            population, idx, masses, updated_velocity)
 
 
 if __name__ == '__main__':

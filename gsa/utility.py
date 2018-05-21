@@ -29,7 +29,8 @@ def distance_vectors(sol_first, sol_second):
 
 
 def get_masses(population):
-    """Get masses of agents in a population"""
+    """Get masses of agents in a population
+       worst solution has a mass of zero"""
     pop_fitness = []
     masses = []
     for agent in population:
@@ -119,3 +120,77 @@ def pop_acceleration(population, iteration):
     # print(masses_array)
     # mass can be zero so change divide by zero(nan) to number
     return np.nan_to_num(acceleration)
+
+
+def update_velocity(acceleration):
+    """Update velocity of agents"""
+    random_vector = np.random.rand(len(acceleration))
+    updated_velocity = cfg.VELOCITY * random_vector[:, None]
+    cfg.VELOCITY = acceleration + updated_velocity
+    return cfg.VELOCITY
+
+
+def get_normalized_velocity(acceleration):
+    """Get normalized velocity in range 0 to 1
+       probability of updating higher for high values"""
+    vel = update_velocity(acceleration)
+    # print(vel)
+    return (vel - np.min(vel)) / np.ptp(vel)
+
+
+def find_interval(val, partition):
+    """ find_interval -> i
+        partition is a sequence of numerical values
+        x is a numerical value
+        The return value "i" will be the index for which applies
+        partition[i] < x < partition[i+1], if such an index exists.
+        -1 otherwise
+    """
+
+    for i, value in enumerate(partition):
+        if val < value:
+            return i - 1
+    return -1
+
+
+def weighted_choice(sequence, weights, secure=True):
+    """ weighted_choice selects a random element of the sequence according to the list of weights"""
+
+    if secure:
+        crypto = random.SystemRandom()
+        rand_x = crypto.random()
+    else:
+        rand_x = random.random()
+    cum_weights = [0] + list(np.cumsum(weights))
+    # convert to range 0 and 1 because random func is in range 0 to 1
+    cum_weights = np.array(cum_weights)
+    cum_weights = (cum_weights - np.min(cum_weights)) / np.ptp(cum_weights)
+    index = find_interval(rand_x, cum_weights)
+    print(rand_x, "rand_value")
+    # print(cum_weights)
+    return sequence[index]
+
+
+def dimension_new_position(population, index, masses, norm_vel):
+    """Get the updated value of a variable : single allele in an individual"""
+    column_vel = norm_vel[:, index]
+    kbest = 2  # best 10 values
+    masses = np.array(masses, dtype='f')
+    # print(type(masses), masses)
+    # print(column_vel, "col_velocity")
+    ind = list(np.argpartition(masses, -kbest)[-kbest:])
+    # print(type(ind), ind)
+
+    # filter masses and velocity to contain only top indices
+    # filtered_masses = np.array(masses)[ind]
+    # print(filtered_masses, "filtered_masses")
+    filtered_vector = np.array(column_vel)[ind]
+    # print(filtered_vector, "col_vector")
+
+    # get weighted position index
+    w_ind = weighted_choice(ind, filtered_vector, False)
+    print(w_ind)
+    new_position = population[w_ind][index]
+    print(new_position)  # accept new pos based on mutation prob
+    if random.random() <= 0.1:
+        print("To reject new position. Select random new val from possible")
