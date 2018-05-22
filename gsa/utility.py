@@ -108,6 +108,7 @@ def pop_acceleration(population, iteration):
     # print(masses)
     pop_gf = []
     for idx, agent in enumerate(population):
+        print("\tComputing acceleration for agent: ", idx)
         agent_gf = agent_grav_field(agent, population, masses, iteration, idx)
         pop_gf.append(agent_gf)
     np_array = np.array(pop_gf, dtype='f')
@@ -117,7 +118,9 @@ def pop_acceleration(population, iteration):
     acceleration = np_array / masses_array[:, None]
     # print(np_array.shape)
     # print(masses_array.shape)
-    # print(masses_array)
+    # print("\n", masses_array)
+    # print("\n", np_array)
+    # print("\n", acceleration)
     # mass can be zero so change divide by zero(nan) to number
     return np.nan_to_num(acceleration)
 
@@ -153,20 +156,16 @@ def find_interval(val, partition):
     return -1
 
 
-def weighted_choice(sequence, weights, secure=True):
+def weighted_choice(sequence, weights):
     """ weighted_choice selects a random element of the sequence according to the list of weights"""
 
-    if secure:
-        crypto = random.SystemRandom()
-        rand_x = crypto.random()
-    else:
-        rand_x = random.random()
+    rand_x = random.random()
     cum_weights = [0] + list(np.cumsum(weights))
     # convert to range 0 and 1 because random func is in range 0 to 1
     cum_weights = np.array(cum_weights)
     cum_weights = (cum_weights - np.min(cum_weights)) / np.ptp(cum_weights)
     index = find_interval(rand_x, cum_weights)
-    print(rand_x, "rand_value")
+    # print(rand_x, "rand_value")
     # print(cum_weights)
     return sequence[index]
 
@@ -174,7 +173,7 @@ def weighted_choice(sequence, weights, secure=True):
 def dimension_new_position(population, index, masses, norm_vel):
     """Get the updated value of a variable : single allele in an individual"""
     column_vel = norm_vel[:, index]
-    kbest = 2  # best 10 values
+    kbest = 1  # best 10 values
     masses = np.array(masses, dtype='f')
     # print(type(masses), masses)
     # print(column_vel, "col_velocity")
@@ -188,9 +187,28 @@ def dimension_new_position(population, index, masses, norm_vel):
     # print(filtered_vector, "col_vector")
 
     # get weighted position index
-    w_ind = weighted_choice(ind, filtered_vector, False)
-    print(w_ind)
+    w_ind = weighted_choice(ind, filtered_vector)
+    # print(w_ind)
     new_position = population[w_ind][index]
-    print(new_position)  # accept new pos based on mutation prob
-    if random.random() <= 0.1:
-        print("To reject new position. Select random new val from possible")
+    # print(new_position)  # accept new pos based on mutation prob
+    if random.random() <= cfg.MUTATION_PROB:
+        # To reject new position. Select random new val from possible"
+        return random.choice(cfg.STUDENTS[index]['proj_pref'])
+    return new_position
+
+
+def update_population(population, normalized_velocity):
+    """Get new position of agents in a poulation"""
+    new_pop = []
+    masses = get_masses(population)
+    for idx, agent in enumerate(population):
+        print("\t Updating position of agent: ", idx)
+        new_agent = []
+        for jdx, _ in enumerate(agent):
+            # print(idx, jdx)
+            new_dim_pos = dimension_new_position(
+                population, jdx, masses, normalized_velocity)
+            new_agent.append(new_dim_pos)
+        new_pop.append(new_agent)
+    # TODO preserve the best agent from prev generation
+    return new_pop
