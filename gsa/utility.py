@@ -45,7 +45,7 @@ def get_masses(population):
         diff = min_fitness - max_fitness
         sum_fitness = sum(pop_fitness)
         for fitness in pop_fitness:
-            small_em = (fitness - max_fitness) / diff
+            small_em = (fitness - max_fitness + 1) / diff
             mass = small_em / sum_fitness
             masses.append(mass)
     return masses
@@ -190,10 +190,6 @@ def dimension_new_position(population, index, masses, norm_vel, kbest):
     w_ind = weighted_choice(ind, filtered_vector)
     # print(w_ind)
     new_position = population[w_ind][index]
-    # print(new_position)  # accept new pos based on mutation prob
-    if random.random() <= cfg.MUTATION_PROB:
-        # To reject new position. Select random new val from possible"
-        return random.choice(cfg.STUDENTS[index]['proj_pref'])
     return new_position
 
 
@@ -202,13 +198,24 @@ def update_population(population, normalized_velocity, k_best):
     new_pop = []
     masses = get_masses(population)
     best_sol_prev = masses.index(max(masses))
+    # print(normalized_velocity)
     for idx, agent in enumerate(population):
         print("\t Updating position of agent: ", idx)
+        # print(normalized_velocity[idx, :])
         new_agent = []
-        for jdx, _ in enumerate(agent):
+        for jdx, val in enumerate(agent):
             # print(idx, jdx)
-            new_dim_pos = dimension_new_position(
-                population, jdx, masses, normalized_velocity, k_best)
+            a_jdx = normalized_velocity[idx][jdx]
+            # print(a_jdx)
+            if random.random() <= a_jdx:
+                new_dim_pos = dimension_new_position(
+                    population, jdx, masses, normalized_velocity, k_best)
+            else:
+                new_dim_pos = val
+            # print(new_position)  # accept new pos based on mutation prob
+            if random.random() <= cfg.MUTATION_PROB:
+                # Mutate solution with probability
+                new_dim_pos = random.choice(cfg.STUDENTS[jdx]['proj_pref'])
             new_agent.append(new_dim_pos)
         new_pop.append(new_agent)
 
