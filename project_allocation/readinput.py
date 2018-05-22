@@ -7,7 +7,7 @@ from project_allocation import config as cfg
 
 def read_student():
     """Read the input files"""
-    with open("data/student.csv") as file:
+    with open("data/student_bk.csv") as file:
         for line in file:
             data = line.strip('\n').split("\t")
             stud = student.Student(data[0], list(map(int, data[1:6])), data[6])

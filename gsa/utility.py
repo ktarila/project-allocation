@@ -170,10 +170,10 @@ def weighted_choice(sequence, weights):
     return sequence[index]
 
 
-def dimension_new_position(population, index, masses, norm_vel):
+def dimension_new_position(population, index, masses, norm_vel, kbest):
     """Get the updated value of a variable : single allele in an individual"""
     column_vel = norm_vel[:, index]
-    kbest = 1  # best 10 values
+    # print(kbest)
     masses = np.array(masses, dtype='f')
     # print(type(masses), masses)
     # print(column_vel, "col_velocity")
@@ -197,18 +197,23 @@ def dimension_new_position(population, index, masses, norm_vel):
     return new_position
 
 
-def update_population(population, normalized_velocity):
+def update_population(population, normalized_velocity, k_best):
     """Get new position of agents in a poulation"""
     new_pop = []
     masses = get_masses(population)
+    best_sol_prev = masses.index(max(masses))
     for idx, agent in enumerate(population):
         print("\t Updating position of agent: ", idx)
         new_agent = []
         for jdx, _ in enumerate(agent):
             # print(idx, jdx)
             new_dim_pos = dimension_new_position(
-                population, jdx, masses, normalized_velocity)
+                population, jdx, masses, normalized_velocity, k_best)
             new_agent.append(new_dim_pos)
         new_pop.append(new_agent)
-    # TODO preserve the best agent from prev generation
+
+    # preserve the best agent from prev generation
+    cur_masses = get_masses(new_pop)
+    worst_sol_curent = cur_masses.index(min(cur_masses))
+    new_pop[worst_sol_curent] = population[best_sol_prev]
     return new_pop
