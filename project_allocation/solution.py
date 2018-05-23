@@ -106,12 +106,13 @@ def get_cgpa_equal_penalty(solution):
     return penalty
 
 
-def get_solution_quality(solution):
+def get_solution_quality(solution, verbose=False):
     """Get the quality of a timetable solution"""
     gesp = get_extra_student_penalty(solution)
     gspp = get_student_pref_penalty(solution)
     gcep = get_cgpa_equal_penalty(solution)
-    # print('GESP - Above average num students', gesp)
-    # print('gcep - CGPA equal average', gcep)
-    # print('gspp - Student Pref', gspp)
+    if verbose:
+        print('GESP - Above average num students', gesp)
+        print('gcep - CGPA equal average', gcep)
+        print('gspp - Student Pref', gspp)
     return gesp * 5 + 10 * gcep + gspp

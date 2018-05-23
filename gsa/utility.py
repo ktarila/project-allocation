@@ -108,7 +108,7 @@ def pop_acceleration(population, iteration):
     # print(masses)
     pop_gf = []
     for idx, agent in enumerate(population):
-        print("\tComputing acceleration for agent: ", idx)
+        # print("\tComputing acceleration for agent: ", idx)
         agent_gf = agent_grav_field(agent, population, masses, iteration, idx)
         pop_gf.append(agent_gf)
     np_array = np.array(pop_gf, dtype='f')
@@ -200,7 +200,7 @@ def update_population(population, normalized_velocity, k_best):
     best_sol_prev = masses.index(max(masses))
     # print(normalized_velocity)
     for idx, agent in enumerate(population):
-        print("\t Updating position of agent: ", idx)
+        # print("\t Updating position of agent: ", idx)
         # print(normalized_velocity[idx, :])
         new_agent = []
         for jdx, val in enumerate(agent):
