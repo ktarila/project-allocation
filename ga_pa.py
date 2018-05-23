@@ -16,7 +16,7 @@ from project_allocation import readinput, solution
 from project_allocation import config as cfg
 
 
-NGEN = 1
+NGEN = 500
 # NGEN = 1
 MU = 400
 LAMBDA = 150
@@ -24,7 +24,7 @@ CXPB = 0.7
 MUTPB = 0.2
 RANDSEED = 64
 FREQ = 50  # save checkpoint ever 50 generations
-MAXGENNOINPROVE = 20
+MAXGENNOINPROVE = 500
 POP_SIZE = 100
 
 
@@ -60,10 +60,10 @@ def evolution(checkpoint=None):
     # toolbox.register("mate", genetic_operators.huniformcrossover)
     # toolbox.register("select", tools.selNSGA2)
     toolbox.register("select", tools.selTournament, tournsize=3)
-    return evolve(toolbox, checkpoint, False)
+    return evolve(toolbox, checkpoint)
 
 
-def evolve(toolbox, checkpoint, evolve_type=True):
+def evolve(toolbox, checkpoint):
     """Evolve a population and return final population
     eaMuPlusLambda implementation with saving checkpoints
     stop criteria at minimum or consecutive non improve
@@ -91,10 +91,7 @@ def evolve(toolbox, checkpoint, evolve_type=True):
         # print(cpoint["consecutive"], cpoint["generation"])
     else:
         # Start a new evolution
-        if evolve_type:
-            pop = toolbox.population(n=MU)
-        else:
-            pop = toolbox.population()
+        pop = toolbox.population()
         gen = 0
         consecutive = 0
         halloffame = tools.HallOfFame(maxsize=1)
@@ -117,6 +114,8 @@ def evolve(toolbox, checkpoint, evolve_type=True):
     currentmin = min(fits)
     if gen == 0:
         gen += 1
+
+    print(type(pop))
 
     # Begin the generational process
     # for gen in range(1, NGEN + 1)
@@ -205,7 +204,8 @@ def main():
     hof, _ = evolution(cp_fullpath)
 
     final_solution = hof[0]
-    solution.get_solution_quality(final_solution, True)
+    final_val = solution.get_solution_quality(final_solution, True)
+    print(final_val)
 
 
 if __name__ == '__main__':

@@ -19,8 +19,8 @@ def main():
     # print("Quality of ", rand_solution, "is: ", quality)
 
     # Gravitational search algorithm
-    num_iterations = 90
-    num_agents = 50
+    num_iterations = 500
+    num_agents = 100
     population = utility.initialize_gsa(num_iterations, num_agents)
     global_best = population[0]
     gb_quality = solution.get_solution_quality(global_best)

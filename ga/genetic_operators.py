@@ -20,10 +20,10 @@ def mutate(individual):
     indi = copy.copy(individual)
     indi[rand_student] = random.choice(cfg.STUDENTS[rand_student]['proj_pref'])
 
-    print(individual, "old Individual")
-    print(indi, "new Individual")
+    # print(individual, "old Individual")
+    # print(indi, "new Individual")
 
-    return indi
+    return indi,
 
 
 def crossover(ind1, ind2):
@@ -34,9 +34,15 @@ def crossover(ind1, ind2):
     first_half = list(range(0, c_slice))
     second_half = list(range(c_slice, len(ind1)))
 
+    new_i1 = copy.copy(ind1)
+    new_i2 = copy.copy(ind2)
+
     new_ind1 = [ind1[index] for index in first_half] + [ind2[index]
                                                         for index in second_half]
     new_ind2 = [ind2[index] for index in first_half] + [ind1[index]
                                                         for index in second_half]
+    for idx in range(0, len(ind1)):
+        new_i1[idx] = new_ind1[idx]
+        new_i2[idx] = new_ind2[idx]
 
-    return new_ind1, new_ind2
+    return new_i1, new_i2
