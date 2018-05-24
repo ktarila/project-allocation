@@ -49,6 +49,7 @@ def main():
         print("Average agent in iteration ", idx,
               " is ", sum(sol_q) / len(sol_q))
         print("Best agent in iteration ", idx, " is ", min(sol_q))
+        readinput.write_to_file(sol_q, idx)
 
         if min(sol_q) < gb_quality:
             gb_quality = min(sol_q)

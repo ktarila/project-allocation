@@ -1,5 +1,8 @@
 """Read the input file to create allocation"""
 from math import ceil
+from pathlib import Path
+import os.path
+import numpy as np
 from project_allocation import student
 from project_allocation import project
 from project_allocation import config as cfg
@@ -27,3 +30,31 @@ def read_subject_areas():
     total = ceil(len(cfg.STUDENTS) / len(cfg.SUPERVISORS))
     for item in cfg.SUPERVISORS:
         cfg.SUPERVISORS[item] = total
+
+
+def write_to_file(solution, iteration):
+    """Write solution log to a file"""
+    filename = "Log/gsa_log.csv"
+    direct = os.path.abspath(os.path.join(filename, os.pardir))
+    filename = direct + "/gsa_log.csv"
+    print(filename)
+    my_file = Path(filename)
+    # print(my_file)
+    if not my_file.is_file():
+        new_file = open(filename, "w")
+        new_file.write("Iteration\tMin\tMax\tAvg\tStd\n")
+        new_file.close()
+
+    file_log = open(filename, "a+")
+
+    n_array = np.array(solution)
+    avg = np.mean(n_array)
+    maximum = np.max(n_array)
+    minimum = np.min(n_array)
+    s_dev = np.std(n_array)
+
+    format_list = [iteration, minimum, maximum, avg, s_dev]
+
+    string = "{}\t{}\t{}\t{}\t{}\n".format(*format_list)
+    file_log.write(string)
+    file_log.close()
