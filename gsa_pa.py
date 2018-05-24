@@ -20,7 +20,6 @@ def main():
 
     # Gravitational search algorithm
 
-
     population = utility.initialize_gsa(cfg.NUM_ITERATIONS, cfg.NUM_AGENTS)
 
     # load checkpoint or initialize
@@ -49,7 +48,6 @@ def main():
         print("Average agent in iteration ", idx,
               " is ", sum(sol_q) / len(sol_q))
         print("Best agent in iteration ", idx, " is ", min(sol_q))
-        readinput.write_to_file(sol_q, idx)
 
         if min(sol_q) < gb_quality:
             gb_quality = min(sol_q)
@@ -67,10 +65,11 @@ def main():
             population, norm_velocity, k_best)
 
         # Fill the dictionary using the dict(key=value[, ...]) constructor
-        cpoint = dict(population=population, iteration=idx,
+        cpoint = dict(population=population, iteration=idx + 1,
                       global_best=global_best,
                       gb_quality=gb_quality,
                       velocity=updated_velocity)
+        readinput.write_to_file(sol_q, idx)
 
         with open(checkpoint, "wb") as cp_file:
             pickle.dump(cpoint, cp_file)
