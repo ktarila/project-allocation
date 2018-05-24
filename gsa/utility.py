@@ -15,6 +15,9 @@ def initialize_gsa(num_iterations, num_agents):
     initial_pop = []
     for _ in range(num_agents):
         initial_pop.append(solution.create_random_solution())
+
+    # for idx, agent in enumerate(cfg.GA_BEST):
+    #     initial_pop[idx] = agent
     return initial_pop
 
 
@@ -174,7 +177,7 @@ def weighted_choice(sequence, weights):
 def dimension_new_position(population, index, masses, norm_vel, kbest):
     """Get the updated value of a variable : single allele in an individual"""
     column_vel = norm_vel[:, index]
-    # print(kbest)
+    # print(kbest, len(masses))
     masses = np.array(masses, dtype='f')
     # print(type(masses), masses)
     # print(column_vel, "col_velocity")
@@ -194,7 +197,7 @@ def dimension_new_position(population, index, masses, norm_vel, kbest):
     return new_position
 
 
-def update_population(population, normalized_velocity, k_best):
+def update_population(population, normalized_velocity, k_best=10):
     """Get new position of agents in a poulation"""
     new_pop = []
     masses = get_masses(population)

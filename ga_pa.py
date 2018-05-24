@@ -24,7 +24,7 @@ CXPB = 0.7
 MUTPB = 0.2
 RANDSEED = 64
 FREQ = 50  # save checkpoint ever 50 generations
-MAXGENNOINPROVE = 500
+MAXGENNOINPROVE = 50
 POP_SIZE = 100
 
 
@@ -57,6 +57,7 @@ def evolution(checkpoint=None):
 
     toolbox.register("mutate", genetic_operators.mutate)
     toolbox.register("mate", genetic_operators.crossover)
+    # toolbox.register("mate", tools.cxTwoPoint)
     # toolbox.register("mate", genetic_operators.huniformcrossover)
     # toolbox.register("select", tools.selNSGA2)
     toolbox.register("select", tools.selTournament, tournsize=3)
@@ -201,11 +202,12 @@ def main():
     cp_fullpath = join(abspath('./Checkpoints'), checkpointname)
 
     # evolution
-    hof, _ = evolution(cp_fullpath)
+    hof, pop = evolution(cp_fullpath)
 
     final_solution = hof[0]
     final_val = solution.get_solution_quality(final_solution, True)
     print(final_val)
+    print(hof[0])
 
 
 if __name__ == '__main__':

@@ -61,6 +61,7 @@ def main():
 
         # Get evolved population
         k_best = int(math.log(cfg.NUM_ITERATIONS - idx + 1) * 10 + 5)
+        # k_best = 11
         population = utility.update_population(
             population, norm_velocity, k_best)
 

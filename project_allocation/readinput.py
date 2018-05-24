@@ -10,7 +10,7 @@ from project_allocation import config as cfg
 
 def read_student():
     """Read the input files"""
-    with open("data/student.csv") as file:
+    with open("data/student_bk.csv") as file:
         for line in file:
             data = line.strip('\n').split("\t")
             stud = student.Student(data[0], list(map(int, data[1:6])), data[6])
@@ -37,7 +37,7 @@ def write_to_file(solution, iteration):
     filename = "Log/gsa_log.csv"
     direct = os.path.abspath(os.path.join(filename, os.pardir))
     filename = direct + "/gsa_log.csv"
-    print(filename)
+    # print(filename)
     my_file = Path(filename)
     # print(my_file)
     if not my_file.is_file():
