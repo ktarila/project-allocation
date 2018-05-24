@@ -11,6 +11,7 @@ def initialize_gsa(num_iterations, num_agents):
     cfg.NUM_AGENTS = num_agents
     cfg.MAX_ITERATIONS = num_iterations
     cfg.VELOCITY = np.zeros((num_agents, dimension))
+    cfg.CURRENT_ITERATION = 1
     initial_pop = []
     for _ in range(num_agents):
         initial_pop.append(solution.create_random_solution())
@@ -136,7 +137,7 @@ def update_velocity(acceleration):
 def get_normalized_velocity(acceleration):
     """Get normalized velocity in range 0 to 1
        probability of updating higher for high values"""
-    vel = update_velocity(acceleration)
+    vel = acceleration
     # print(vel)
     return (vel - np.min(vel)) / np.ptp(vel)
 
