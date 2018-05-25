@@ -27,3 +27,9 @@ BETA = 2
 # rate of evapouration -- high means fast evapouration rate (range between 0 and 1);
 # 0 and 1);
 RHO = 0.05
+
+# Adjacent Matrix
+ADJ_MATRIX = None
+
+#Ant global best
+ANT_GLOBAL = None
