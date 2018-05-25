@@ -3,6 +3,7 @@
 from random import shuffle, random
 import copy
 import math
+import sys
 import numpy as np
 from project_allocation import config as cfg
 from project_allocation import solution
@@ -13,6 +14,7 @@ def initialize_matrix():
 
     cfg.ADJ_MATRIX = np.full(
         (len(cfg.PROJECT_AREAS), len(cfg.STUDENTS)), cfg.T_MIN, dtype='f')
+    print(cfg.ADJ_MATRIX.shape)
     cfg.ANT_GLOBAL = solution.create_random_solution()
 
 
@@ -30,13 +32,17 @@ def update_trail(allocation):
     reward = 1 / (1 + current_quality - best_quality)
     if best_quality > current_quality:
         reward = 1
-    print(reward)
+    # print(reward)
 
     # evapourate pheromones
     evapourate()
 
-    # update rewards
-    cfg.ADJ_MATRIX = cfg.ADJ_MATRIX + reward
+    print(allocation)
+
+    # update rewards for allocation
+    for idx, val in enumerate(allocation):
+        print(val, idx)
+        cfg.ADJ_MATRIX[int(val) - 1][int(idx)] += reward
 
     # set min max if greater or less
     cfg.ADJ_MATRIX[cfg.ADJ_MATRIX > cfg.T_MAX] = cfg.T_MAX
@@ -49,7 +55,7 @@ def assign_project(stud_index, ant_sol):
     # deep copy so modification wont change original
     # Compute heuristic factor here
     temp_sol = copy.deepcopy(ant_sol)
-    print(temp_sol)
+    # print(temp_sol)
 
     # get only allowed allocations for student
     stud_prefs = cfg.STUDENTS[stud_index]['proj_pref']
@@ -57,7 +63,9 @@ def assign_project(stud_index, ant_sol):
 
     # compute probabilities
     for idx, val in enumerate(stud_prefs):
-        trail = cfg.ADJ_MATRIX[val][stud_index]
+        print(val, stud_index)
+        # trail is val - 1 coz projects start from 1 
+        trail = cfg.ADJ_MATRIX[val-1][stud_index]
         trail_factor = math.pow(trail, cfg.BETA)
 
         # heuristic_factor = math.pow(heuristic, cfg.ALPHA);
@@ -90,9 +98,32 @@ def ant_graph_walk():
 
     indices = [val for val in range(num_stud)]
     # shuffle indices so projects are assigned randomly
+    print(indices)
     shuffle(indices)
+    print(indices)
     for stud in indices:
         # assign a project
         proj = assign_project(stud, ant_sol)
         ant_sol[stud] = proj
     return ant_sol
+
+
+def ant_colony(num_ants, num_cycles):
+    """Run the ants colony optimizaation algorithm"""
+    for idx in range(num_cycles):
+        cyclebest = []
+        cycle_best_quality = sys.maxsize
+        for jdx in range(num_ants):
+            ant_walk = ant_graph_walk()
+            walk_quality = solution.get_solution_quality(ant_walk)
+            if cycle_best_quality > walk_quality:
+                cycle_best_quality = walk_quality
+                cyclebest = ant_walk
+            print("\t\tCycle", idx, "Ant", jdx, "Quality: ", walk_quality)
+            if cycle_best_quality == 0:
+                cfg.ANT_GLOBAL = cyclebest
+                return cyclebest
+        update_trail(cyclebest)
+        if cycle_best_quality < solution.get_solution_quality(cfg.ANT_GLOBAL):
+            cfg.ANT_GLOBAL = cyclebest
+    return cfg.ANT_GLOBAL

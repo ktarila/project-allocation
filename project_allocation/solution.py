@@ -25,7 +25,7 @@ def solution_to_allocation(solution):
     """Convert a solution to project allocation"""
     allocation_list = []
     for idx, val in enumerate(solution):
-        val_idx = val - 1  # convert index to 0 to n -1
+        val_idx = int(val - 1)  # convert index to 0 to n -1
         allocation_list.append(
             {'student': cfg.STUDENTS[idx]['name'], 'supervisor': cfg.PROJECT_AREAS[
                 val_idx]['supervisor'], 'area': cfg.PROJECT_AREAS[val_idx]['area']})
