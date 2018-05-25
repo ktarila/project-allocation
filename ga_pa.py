@@ -16,7 +16,7 @@ from project_allocation import readinput, solution
 from project_allocation import config as cfg
 
 
-NGEN = 500
+NGEN = 1000
 # NGEN = 1
 MU = 400
 LAMBDA = 150
@@ -24,7 +24,7 @@ CXPB = 0.7
 MUTPB = 0.2
 RANDSEED = 64
 FREQ = 50  # save checkpoint ever 50 generations
-MAXGENNOINPROVE = 50
+MAXGENNOINPROVE = 100
 POP_SIZE = 100
 
 

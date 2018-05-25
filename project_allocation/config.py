@@ -20,13 +20,13 @@ T_MIN = 0.01
 T_MAX = 10
 # heuristic weight -- high Ants less sensitive to pheromone trail more
 # sensitive to heuristics
-ALPHA = 8
+ALPHA = 7
 # trail weight -- high means ants are less sensitive to heuristic more
 # senstive to pheromone trail
-BETA = 2
+BETA = 3
 # rate of evapouration -- high means fast evapouration rate (range between 0 and 1);
 # 0 and 1);
-RHO = 0.05
+RHO = 0.005
 
 # Adjacent Matrix
 ADJ_MATRIX = None

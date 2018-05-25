@@ -32,11 +32,11 @@ def read_subject_areas():
         cfg.SUPERVISORS[item] = total
 
 
-def write_to_file(solution, iteration):
+def write_to_file(solution, iteration, name="/gsa_log.csv"):
     """Write solution log to a file"""
     filename = "Log/gsa_log.csv"
     direct = os.path.abspath(os.path.join(filename, os.pardir))
-    filename = direct + "/gsa_log.csv"
+    filename = direct + name
     # print(filename)
     my_file = Path(filename)
     # print(my_file)

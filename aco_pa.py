@@ -12,9 +12,10 @@ def main():
     readinput.read_subject_areas()
 
     ant_operators.initialize_matrix()
-    ant_solution = ant_operators.ant_colony(8, 1)
+    ant_solution = ant_operators.ant_colony(8, 1000)
 
-    solution.get_solution_quality(ant_solution, True)
+    final_sol = solution.get_solution_quality(ant_solution, True)
+    print("Final best solution is: ", final_sol)
 
 
 if __name__ == '__main__':
