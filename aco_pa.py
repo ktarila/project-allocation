@@ -12,10 +12,11 @@ def main():
     readinput.read_subject_areas()
 
     ant_operators.initialize_matrix()
-    ant_solution = ant_operators.ant_colony(8, 1000)
+    ant_solution = ant_operators.ant_colony(8, 8000)
 
     final_sol = solution.get_solution_quality(ant_solution, True)
     print("Final best solution is: ", final_sol)
+    readinput.write_best_file(ant_solution, "/aco_log_best.csv")
 
 
 if __name__ == '__main__':

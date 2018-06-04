@@ -24,7 +24,7 @@ CXPB = 0.7
 MUTPB = 0.2
 RANDSEED = 64
 FREQ = 50  # save checkpoint ever 50 generations
-MAXGENNOINPROVE = 100
+MAXGENNOINPROVE = 600
 POP_SIZE = 100
 
 
@@ -56,8 +56,8 @@ def evolution(checkpoint=None):
     toolbox.register("evaluate", genetic_operators.evaluate)
 
     toolbox.register("mutate", genetic_operators.mutate)
-    toolbox.register("mate", genetic_operators.crossover)
-    # toolbox.register("mate", tools.cxTwoPoint)
+    # toolbox.register("mate", genetic_operators.crossover)
+    toolbox.register("mate", tools.cxTwoPoint)
     # toolbox.register("mate", genetic_operators.huniformcrossover)
     # toolbox.register("select", tools.selNSGA2)
     toolbox.register("select", tools.selTournament, tournsize=3)
@@ -165,6 +165,7 @@ def evolve(toolbox, checkpoint):
         print(logbook.stream)  # print records for generation
         # print(currentmin, consecutive)
         gen += 1
+        readinput.write_to_file(fits, gen, "/ga_log.csv", halloffame[0])
 
     print("-- End of (successful) evolution --")
 
@@ -202,12 +203,13 @@ def main():
     cp_fullpath = join(abspath('./Checkpoints'), checkpointname)
 
     # evolution
-    hof, pop = evolution(cp_fullpath)
+    hof, _ = evolution(cp_fullpath)
 
     final_solution = hof[0]
     final_val = solution.get_solution_quality(final_solution, True)
     print(final_val)
     print(hof[0])
+    readinput.write_best_file(final_solution, "/ga_log_best.csv")
 
 
 if __name__ == '__main__':

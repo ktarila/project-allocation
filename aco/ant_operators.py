@@ -149,10 +149,11 @@ def ant_colony(num_ants, num_cycles, use_heu=False):
             print("\tCycle", idx, "Ant", jdx, "Quality: ", walk_quality)
             if cycle_best_quality == 0:
                 cfg.ANT_GLOBAL = cyclebest
+                readinput.write_to_file(cycle_scores, idx + 1, "/aco_log.csv", cyclebest)
                 return cyclebest
         update_trail(cyclebest)
-        # readinput.write_to_file(cycle_scores, idx, "/aco_log.csv")
         if cycle_best_quality < solution.get_solution_quality(cfg.ANT_GLOBAL):
             cfg.ANT_GLOBAL = cyclebest
         print("\t\tGlobal best: ", solution.get_solution_quality(cfg.ANT_GLOBAL))
+        readinput.write_to_file(cycle_scores, idx + 1, "/aco_log.csv", cfg.ANT_GLOBAL)
     return cfg.ANT_GLOBAL

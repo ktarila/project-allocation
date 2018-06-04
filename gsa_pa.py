@@ -1,5 +1,5 @@
 """Entry point of programme"""
-import math
+# import math
 from os.path import abspath, join, isfile
 import pickle
 from project_allocation import readinput
@@ -32,11 +32,13 @@ def main():
         cfg.CURRENT_ITERATION = cpoint["iteration"]
         global_best = cpoint["global_best"]
         gb_quality = cpoint["gb_quality"]
+        k_best = cpoint["k_best"]
         # print(cpoint["consecutive"], cpoint["generation"])
     else:
         # Start a new evolution
         global_best = population[0]
         gb_quality = solution.get_solution_quality(global_best)
+        k_best = cfg.NUM_AGENTS
 
     for idx in range(cfg.CURRENT_ITERATION, cfg.NUM_ITERATIONS + 1):
         print(idx, "************************************")
@@ -60,21 +62,25 @@ def main():
         # print(updated_velocity)
 
         # Get evolved population
-        k_best = int(math.log(cfg.NUM_ITERATIONS - idx + 1) * 10 + 5)
-        # k_best = 11
         population = utility.update_population(
             population, norm_velocity, k_best)
+
+        # k_best = int(math.log(cfg.NUM_ITERATIONS - idx + 1) * 10 + 5)
+        if (k_best - 1) > 1:
+            k_best = k_best - 1
 
         # Fill the dictionary using the dict(key=value[, ...]) constructor
         cpoint = dict(population=population, iteration=idx + 1,
                       global_best=global_best,
                       gb_quality=gb_quality,
-                      velocity=updated_velocity)
-        readinput.write_to_file(sol_q, idx)
+                      velocity=updated_velocity,
+                      k_best=k_best)
+        readinput.write_to_file(sol_q, idx, "/gsa_log.csv", global_best)
 
         with open(checkpoint, "wb") as cp_file:
             pickle.dump(cpoint, cp_file)
     solution.get_solution_quality(global_best, True)
+    readinput.write_best_file(global_best)
 
 
 if __name__ == '__main__':
