@@ -78,7 +78,11 @@ def main():
     ga_best_run = read_logfile("ga_log.csv")
     ga_convergence = get_convergence_list(ga_best_run)
 
-    list_len = [len(ant_convergence), len(ga_convergence)]
+    # get log file for gsa run
+    gsa_best_run = read_logfile("gsa_log.csv")
+    gsa_convergence = get_convergence_list(gsa_best_run)
+
+    list_len = [len(ant_convergence), len(ga_convergence), len(gsa_convergence)]
 
     # extend ga convergence list
     if len(ga_convergence) < max(list_len):
@@ -86,10 +90,18 @@ def main():
         temp_list = [ga_convergence[-1]] * num_req
         ga_convergence = ga_convergence + temp_list
 
+    # extend gsa convergence list
+    if len(gsa_convergence) < max(list_len):
+        num_req = max(list_len) - len(gsa_convergence)
+        temp_list = [gsa_convergence[-1]] * num_req
+        gsa_convergence = gsa_convergence + temp_list
+
     plt.plot(ant_convergence, color='black', linestyle='--',
              label='Ant Colony Optimisation')
     plt.plot(ga_convergence, color='black',
              linestyle=':', label='Genetic Algorithm')
+    plt.plot(gsa_convergence, color='black',
+             label='Gravitational Search Algorithm')
     plt.legend()
     plt.xlabel('Number of iterations')
     plt.ylabel('Quality of solution (minimisation)')
