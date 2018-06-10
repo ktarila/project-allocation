@@ -1,7 +1,10 @@
 """Process log file to create graphs for output"""
 import copy
 from matplotlib import pyplot as plt
+import matplotlib
 import numpy as np
+import seaborn as sns
+from matplotlib.colors import LinearSegmentedColormap
 from project_allocation import solution
 from project_allocation import readinput
 
@@ -113,15 +116,21 @@ def main():
     data = np.array(pref_lists)
     print(data)
 
-    patterns = [ "/" , "\\" , "|" , "-" , "+" , "x", "o", "O", ".", "*" ]
+    # matplotlib.style.use('ggplot')
+
+    # patterns = [ "/" , "\\" , "|" , "-" , "+" , "x", "o", "O", ".", "*" ]
+    patterns = [ "" , "o" , "*" , "/" ,"" , "o" ,"+" , "*" ,"" ]
     x = np.arange(data.shape[0])
+    colors = sns.color_palette("Greys_r", n_colors=data.shape[1])
+
     fig, ax=plt.subplots()
     for i in range(data.shape[1]):
-        bottom=np.sum(data[:,0:i], axis=1)  
-        ax.bar(x,data[:,i], bottom=bottom, hatch=patterns[i], label="label {}".format(i))
+        bottom=np.sum(data[:,0:i], axis=1)
+        # ax.bar(x,data[:,i], bottom=bottom, color=colors[i], label="label {}".format(i))  
+        ax.bar(x,data[:,i], bottom=bottom, color=colors[i], edgecolor='black', hatch=patterns[i], label="label {}".format(i))
 
     plt.legend(framealpha=1, ncol=4).draggable()
-    plt.yticks(np.arange(0, 100, 10))
+    plt.yticks(np.arange(0, 100, 6))
     plt.gray()
     plt.show()
     # for item in pref_lists:
