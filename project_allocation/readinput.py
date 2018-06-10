@@ -84,3 +84,34 @@ def write_best_file(solution, name="/gsa_log_best.csv"):
     string = "{}\t{}\n".format(*format_list)
     file_log.write(string)
     file_log.close()
+
+
+def input_stats():
+    """Compute input statistics"""
+
+    supervisors = list((cfg.SUPERVISORS.keys()))
+    num_sup = len(supervisors)
+
+    pref_1 = [0] * num_sup
+    pref_2 = [0] * num_sup
+    pref_3 = [0] * num_sup
+    pref_4 = [0] * num_sup
+    pref_5 = [0] * num_sup
+
+    for stud in cfg.STUDENTS:
+        for idx, pref in enumerate(stud['proj_pref']):
+            val = pref - 1
+            # print(cfg.PROJECT_AREAS[val])
+            index = supervisors.index(cfg.PROJECT_AREAS[val]['supervisor'])
+            # print(idx, val, pref, stud['proj_pref'])
+            if idx == 0:
+                pref_1[index] += 1
+            if idx == 1:
+                pref_2[index] += 1
+            if idx == 2:
+                pref_3[index] += 1
+            if idx == 3:
+                pref_4[index] += 1
+            if idx == 4:
+                pref_5[index] += 1
+    return [pref_1, pref_2, pref_3, pref_4, pref_5]

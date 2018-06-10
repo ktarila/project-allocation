@@ -21,6 +21,19 @@ def create_random_solution():
     # return list(np.random.randint(1, max_projects, max_students))
 
 
+def create_stud_solution():
+    """Create a solution of stud most preferred proect"""
+    # max_projects = len(cfg.PROJECT_AREAS)
+    # max_students = len(cfg.STUDENTS)
+    rand_sol = []
+    for value in cfg.STUDENTS:
+        # print(value)
+        rand_sol.append(value['proj_pref'][0])
+    # print(len(rand_sol))
+    return rand_sol
+    # return list(np.random.randint(1, max_projects, max_students))
+
+
 def solution_to_allocation(solution):
     """Convert a solution to project allocation"""
     allocation_list = []

@@ -13,9 +13,9 @@ def initialize_gsa(num_iterations, num_agents):
     cfg.VELOCITY = np.zeros((num_agents, dimension))
     cfg.CURRENT_ITERATION = 1
     initial_pop = []
-    for _ in range(num_agents):
+    for _ in range(num_agents-1):
         initial_pop.append(solution.create_random_solution())
-
+    initial_pop.append(solution.create_stud_solution())
     # for idx, agent in enumerate(cfg.GA_BEST):
     #     initial_pop[idx] = agent
     return initial_pop

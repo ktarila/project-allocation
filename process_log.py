@@ -1,6 +1,7 @@
 """Process log file to create graphs for output"""
 import copy
 from matplotlib import pyplot as plt
+import numpy as np
 from project_allocation import solution
 from project_allocation import readinput
 
@@ -108,13 +109,58 @@ def main():
     readinput.read_student()
     readinput.read_subject_areas()
 
-    compute_performance_metric("aco_log_best.csv")
-    print("\n\n")
-    compute_performance_metric("ga_log_best.csv")
-    print("\n\n")
-    compute_performance_metric("gsa_log_best.csv")
-    print("\n\n")
+    pref_lists = readinput.input_stats()
+    data = np.array(pref_lists)
+    print(data)
 
+    patterns = [ "/" , "\\" , "|" , "-" , "+" , "x", "o", "O", ".", "*" ]
+    x = np.arange(data.shape[0])
+    fig, ax=plt.subplots()
+    for i in range(data.shape[1]):
+        bottom=np.sum(data[:,0:i], axis=1)  
+        ax.bar(x,data[:,i], bottom=bottom, hatch=patterns[i], label="label {}".format(i))
+
+    plt.legend(framealpha=1, ncol=4).draggable()
+    plt.yticks(np.arange(0, 100, 10))
+    plt.gray()
+    plt.show()
+    # for item in pref_lists:
+    #     print(item)
+
+    # number = len(pref_lists[0])
+
+    # ind = np.arange(number)    # the x locations for the groups
+    # width = 0.35       # the width of the bars: can also be len(x) sequence
+
+    # p1 = plt.bar(ind, pref_lists[0], width)
+    # p2 = plt.bar(ind, pref_lists[1], width,
+    #              bottom=pref_lists[0])
+    # p3 = plt.bar(ind, pref_lists[2], width,
+    #              bottom=pref_lists[1])
+    # p4 = plt.bar(ind, pref_lists[3], width,
+    #              bottom=pref_lists[2])
+    # p5 = plt.bar(ind, pref_lists[4], width,
+    #              bottom=pref_lists[3])
+
+    # plt.ylabel('Scores')
+    # plt.title('Scores by group and gender')
+    # plt.xticks(ind, ('G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'))
+    # # plt.yticks(np.arange(0, 81, 10))
+    # plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0]),
+    #            ('Men', 'Women', 'P3', 'P4', 'P5'))
+
+    # plt.show()
+
+    # sol = solution.create_stud_solution()
+    # fitness = solution.get_solution_quality(sol, True)
+    # print(fitness)
+
+    # compute_performance_metric("aco_log_best.csv")
+    # print("\n\n")
+    # compute_performance_metric("ga_log_best.csv")
+    # print("\n\n")
+    # compute_performance_metric("gsa_log_best.csv")
+    # print("\n\n")
 
     # compute_min_max_avg("aco_log_best.csv")
     # compute_min_max_avg("gsa_log_best.csv")
