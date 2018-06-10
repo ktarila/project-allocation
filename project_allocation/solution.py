@@ -77,6 +77,25 @@ def get_student_pref_penalty(solution):
     return penalty
 
 
+def group_student_pref_penalty(solution):
+    """count number of student preferences"""
+    pref_group = {}
+    for idx, value in enumerate(solution):
+        stud_prefs = cfg.STUDENTS[idx]['proj_pref']
+        pref_penalty = 0
+        try:
+            pref_penalty = stud_prefs.index(value)
+            if pref_penalty in pref_group:
+                pref_group[pref_penalty] += 1
+            else:
+                pref_group[pref_penalty] = 1
+        except ValueError:
+            # penalty of 50 if assigned to non desired project
+            pref_penalty = 50
+        # print(pref_penalty, value, stud_prefs)
+    return pref_group
+
+
 def get_cgpa_equal_penalty(solution):
     """Get sum of difference between Lecturers average cgpa"""
     penalty = 0
