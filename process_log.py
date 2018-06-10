@@ -28,6 +28,7 @@ def compute_performance_metric(filename="aco_log_best.csv"):
     results = read_log_best(filename)
     best = min(results, key=lambda results: results['min'])
     pref_metric = solution.group_student_pref_penalty(best['best'])
+    print(solution.get_solution_quality(best['best'], verbose=True))
     print(pref_metric)
 
 
@@ -108,6 +109,12 @@ def main():
     readinput.read_subject_areas()
 
     compute_performance_metric("aco_log_best.csv")
+    print("\n\n")
+    compute_performance_metric("ga_log_best.csv")
+    print("\n\n")
+    compute_performance_metric("gsa_log_best.csv")
+    print("\n\n")
+
 
     # compute_min_max_avg("aco_log_best.csv")
     # compute_min_max_avg("gsa_log_best.csv")
