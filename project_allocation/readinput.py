@@ -1,4 +1,7 @@
 """Read the input file to create allocation"""
+import operator
+import itertools
+import copy
 from math import ceil
 from pathlib import Path
 import os.path
@@ -115,3 +118,27 @@ def input_stats():
             if idx == 4:
                 pref_5[index] += 1
     return [pref_1, pref_2, pref_3, pref_4, pref_5]
+
+
+def input_props():
+    """Get input properties"""
+    props = {}
+    props['num_studs'] = len(cfg.STUDENTS)
+    props['num_projects'] = len(cfg.PROJECT_AREAS)
+    props['num_supervisors'] = len(cfg.SUPERVISORS)
+
+    stud_cgpa = np.array([float(d['cgpa']) for d in cfg.STUDENTS])
+    props['var_stud_cgpa'] = np.var(stud_cgpa)
+
+    new_pa = copy.deepcopy(cfg.PROJECT_AREAS)
+    new_pa.sort(key=operator.itemgetter('supervisor'))
+    list1 = []
+    for _, items in itertools.groupby(new_pa, operator.itemgetter('supervisor')):
+        list1.append(list(items))
+    count_proj = []
+    for item in list1:
+        count_proj.append(len(item))
+    count_proj = np.array(count_proj)
+    props['var_num_lect_proj'] = np.var(count_proj)
+
+    print(props)

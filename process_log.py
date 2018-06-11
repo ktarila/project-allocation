@@ -1,7 +1,6 @@
 """Process log file to create graphs for output"""
 import copy
 from matplotlib import pyplot as plt
-import matplotlib
 import numpy as np
 import seaborn as sns
 from matplotlib.colors import LinearSegmentedColormap
@@ -112,6 +111,8 @@ def main():
     readinput.read_student()
     readinput.read_subject_areas()
 
+    readinput.input_props()
+
     pref_lists = readinput.input_stats()
     data = np.array(pref_lists)
     print(data)
@@ -119,20 +120,91 @@ def main():
     # matplotlib.style.use('ggplot')
 
     # patterns = [ "/" , "\\" , "|" , "-" , "+" , "x", "o", "O", ".", "*" ]
-    patterns = [ "" , "o" , "*" , "/" ,"" , "o" ,"+" , "*" ,"" ]
-    x = np.arange(data.shape[0])
+    patterns = ["", "o", "*", "/", "", "o", "+", "*", ""]
+    x = np.arange(data.shape[1])
     colors = sns.color_palette("Greys_r", n_colors=data.shape[1])
 
-    fig, ax=plt.subplots()
-    for i in range(data.shape[1]):
-        bottom=np.sum(data[:,0:i], axis=1)
-        # ax.bar(x,data[:,i], bottom=bottom, color=colors[i], label="label {}".format(i))  
-        ax.bar(x,data[:,i], bottom=bottom, color=colors[i], edgecolor='black', hatch=patterns[i], label="label {}".format(i))
+    # fig, ax=plt.subplots()
+    print(x)
+    print(data[0, :])
+    # plt.subplot(2, 3, 1)
+    # plt.bar(x, data[0,:], edgecolor='black', width=1, label="label {}".format(0))
+    fig = plt.figure()
+    ax1 = fig.add_subplot(2, 3, 1)
+    for i in range(len(x)):
+        ax1.bar(i, data[0][i], color=colors[i], edgecolor='black',
+                hatch=patterns[i], label="Supervisor {}".format(i + 1))
+    plt.tick_params(
+        axis='x',          # changes apply to the x-axis
+        which='both',      # both major and minor ticks are affected
+        bottom=False,      # ticks along the bottom edge are off
+        top=False,         # ticks along the top edge are off
+        labelbottom=False)  # labels along the bottom edge are off
 
-    plt.legend(framealpha=1, ncol=4).draggable()
-    plt.yticks(np.arange(0, 100, 6))
-    plt.gray()
+    ax2 = fig.add_subplot(2, 3, 2)
+    for i in range(len(x)):
+        ax2.bar(i, data[1][i], color=colors[i], edgecolor='black',
+                hatch=patterns[i])
+    plt.tick_params(
+        axis='x',          # changes apply to the x-axis
+        which='both',      # both major and minor ticks are affected
+        bottom=False,      # ticks along the bottom edge are off
+        top=False,         # ticks along the top edge are off
+        labelbottom=False)  # labels along the bottom edge are off
+
+    ax3 = fig.add_subplot(2, 3, 3)
+    for i in range(len(x)):
+        ax3.bar(i, data[2][i], color=colors[i], edgecolor='black',
+                hatch=patterns[i])
+    plt.tick_params(
+        axis='x',          # changes apply to the x-axis
+        which='both',      # both major and minor ticks are affected
+        bottom=False,      # ticks along the bottom edge are off
+        top=False,         # ticks along the top edge are off
+        labelbottom=False)  # labels along the bottom edge are off
+
+    ax4 = fig.add_subplot(2, 3, 4)
+    for i in range(len(x)):
+        ax4.bar(i, data[3][i], color=colors[i], edgecolor='black',
+                hatch=patterns[i])
+    plt.tick_params(
+        axis='x',          # changes apply to the x-axis
+        which='both',      # both major and minor ticks are affected
+        bottom=False,      # ticks along the bottom edge are off
+        top=False,         # ticks along the top edge are off
+        labelbottom=False)  # labels along the bottom edge are off
+
+    ax5 = fig.add_subplot(2, 3, 5)
+    for i in range(len(x)):
+        ax5.bar(i, data[4][i], color=colors[i], edgecolor='black',
+                hatch=patterns[i])
+    plt.tick_params(
+        axis='x',          # changes apply to the x-axis
+        which='both',      # both major and minor ticks are affected
+        bottom=False,      # ticks along the bottom edge are off
+        top=False,         # ticks along the top edge are off
+        labelbottom=False)  # labels along the bottom edge are off
+
+    ax1.legend(framealpha=1, ncol=1).draggable()
+    ax1.set_title("1st preference", fontsize=8)
+    ax2.set_title("2nd preference", fontsize=8)
+    ax3.set_title("3rd preference", fontsize=8)
+    ax4.set_title("4th preference", fontsize=8)
+    ax5.set_title("5th preference", fontsize=8)
+    plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
+                        wspace=0.35)
     plt.show()
+
+    # fig, ax=plt.subplots()
+    # for i in range(data.shape[1]):
+    #     bottom=np.sum(data[:,0:i], axis=1)
+    #     # ax.bar(x,data[:,i], bottom=bottom, color=colors[i], label="label {}".format(i))
+    #     ax.bar(x,data[:,i], bottom=bottom, color=colors[i], edgecolor='black', hatch=patterns[i], label="label {}".format(i))
+
+    # plt.legend(framealpha=1, ncol=4).draggable()
+    # plt.yticks(np.arange(0, 100, 6))
+    # plt.gray()
+    # plt.show()
     # for item in pref_lists:
     #     print(item)
 
